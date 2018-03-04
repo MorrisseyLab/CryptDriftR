@@ -36,14 +36,31 @@ fitNeutralDrift = function(x, time_interval, max_iter = 40000, n_par_chains = 4,
 }
 
 
-
-simulateNeutralDriftData <- function(lambda, Ns, tau, time.samples, size_measure, num.crypts)
+#' Simulate data from neutral drift model for testing inference.
+#'
+#' \code{simulateNeutralDriftData} will use the analytical neutral drift model solutions to similate count data. 
+#' 
+#' @param lambda Stem cell replacement rate.
+#' @param Ns Number of functional stem cells per crypt.   
+#' @param tau Time delay until drift starts.   
+#' @param time_points vector of time point values.
+#' @param size_measure Fractions in which the crypts are measured in (e.g. 8ths).
+#' @param num_crypts Number of crypts measured per time point.
+#' 
+#' @return Will retrun simulated crypt clone count data.
+#' 
+#' @examples
+#' time_points = c(4, 7, 10, 14, 21)
+#' x = simulateNeutralDriftData(0.1, 5, 2, time_points, 8, 300)
+#'
+#'@export
+simulateNeutralDriftData <- function(lambda, Ns, tau, time_points, size_measure, num_crypts)
 {
-  Pn <- th_PulseChase(lambda, Ns, tau, time.samples, persisting = T, Pr = 0.5, splitNum = size_measure)
-  xn <- matrix(0, size_measure, length(time.samples))
-  for(i in 1:length(time.samples))
+  Pn <- th_PulseChase(lambda, Ns, tau, time_points, persisting = T, Pr = 0.5, splitNum = size_measure)
+  xn <- matrix(0, size_measure, length(time_points))
+  for(i in 1:length(time_points))
   {
-    x.i          <- sample(1:size_measure, num.crypts, replace = T, prob = Pn[,i])
+    x.i          <- sample(1:size_measure, num_crypts, replace = T, prob = Pn[,i])
     t.i          <- table(x.i)
     indx.i       <- as.numeric(names(t.i))
     xn[indx.i,i] <- t.i    
@@ -86,7 +103,22 @@ gg_qq_int = function(chain)
   pp
 }
 
-
+#' MCMC convergence plots
+#'
+#' \code{plotsConvergence_Neutral} will plot convergence plots using the MCMC chains. 
+#' 
+#' @param fit_vals list produced by fitNeutralDrift containing amongst other things the MCMC chains.
+#' 
+#' @return Return ggplot object with convergence plots.
+#' 
+#' @examples
+#' time_points = c(4, 7, 10, 14, 21)
+#' x = simulateNeutralDriftData(0.1, 5, 2, time_points, 8, 300)
+#' fit_out = fitNeutralDrift(x, time_points)
+#' plotsConvergence_Neutral(fit_out)
+#' plotsNeutralDrift_Fit(fit_out)
+#'
+#'@export
 plotsConvergence_Neutral = function(fit_vals)
 {
   
@@ -118,6 +150,22 @@ plotsConvergence_Neutral = function(fit_vals)
   
 }
 
+#' MCMC inference plots for neutral drift model
+#'
+#' \code{plotPosterior_Neutral} will plot posterior plots using the MCMC chains. 
+#' 
+#' @param fit_vals list produced by fitNeutralDrift containing amongst other things the MCMC chains.
+#' 
+#' @return Return ggplot object with posterior plots.
+#' 
+#' @examples
+#' time_points = c(4, 7, 10, 14, 21)
+#' x = simulateNeutralDriftData(0.1, 5, 2, time_points, 8, 300)
+#' fit_out = fitNeutralDrift(x, time_points)
+#' plotsConvergence_Neutral(fit_out)
+#' plotsNeutralDrift_Fit(fit_out)
+#'
+#'@export
 plotPosterior_Neutral = function(fit_vals)
 {
   all.runs.subs = data.frame(fit_vals$mcmc)
@@ -185,6 +233,24 @@ makePost = function(all.runs.subs, n.vals, breaks.hist)
   post.mat
 }
 
+
+#' Plot data with neutral drift model fit
+#'
+#' \code{plotsNeutralDrift_Fit} will plot  data and fit of neutral drift model. 
+#' 
+#' @param fit_vals list produced by fitNeutralDrift containing amongst other things the MCMC chains.
+#' @param max_x Choose maximum value for the x axis (time)
+#' 
+#' @return Return ggplot object with posterior plots.
+#' 
+#' @examples
+#' time_points = c(4, 7, 10, 14, 21)
+#' x = simulateNeutralDriftData(0.1, 5, 2, time_points, 8, 300)
+#' fit_out = fitNeutralDrift(x, time_points)
+#' plotsConvergence_Neutral(fit_out)
+#' plotsNeutralDrift_Fit(fit_out)
+#'
+#'@export
 plotsNeutralDrift_Fit = function(fit_vals, max_x = 100)
 {
 
