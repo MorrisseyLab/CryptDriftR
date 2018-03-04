@@ -9,7 +9,8 @@
 #' @param burn_in mcmc burn in 
 #' @param thin mcmc thining 
 #' 
-#' @return Will retrun a list that can be used directly with the plotting functions. The list contains an mcmc matrix, the data and time vector used to fit
+#' @return Will retrun a list that can be used directly with the plotting functions. The list contains an mcmc matrix, the data and time vector used to fit, as well 
+#' as the MAP estimate of the parameters.
 #' 
 #' @examples
 #' time_points = c(4, 7, 10, 14, 21)
@@ -18,6 +19,7 @@
 #' plotsConvergence_Neutral(fit_out)
 #' plotsNeutralDrift_Fit(fit_out)
 #'
+#'@export
 fitNeutralDrift = function(x, time_interval, max_iter = 40000, n_par_chains = 4, burn_in = 5000, thin = 20)
 {
   x = as.matrix(x)
