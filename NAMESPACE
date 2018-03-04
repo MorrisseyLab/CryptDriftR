@@ -1,0 +1,3 @@
+useDynLib(CryptDriftR)
+importFrom(Rcpp, evalCpp)
+exportPattern("^[[:alpha:]]+")

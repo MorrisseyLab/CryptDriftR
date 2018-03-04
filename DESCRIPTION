@@ -1,0 +1,14 @@
+Package: CryptDriftR
+Type: Package
+Title: Analyse crypt lineage tracing data 
+Version: 1.0
+Date: 2017-06-21
+Author: Ed Morrissey
+Depends: foreach, doMC, tidyverse, gridExtra, grid, stringr
+Maintainer: Ed <edward.morrissey@imm.ox.ac.uk>
+Description: Neutral and Biased drift analysis package.
+License: MIT
+Imports: Rcpp (>= 0.12.11),
+    dplyr
+LinkingTo: Rcpp, RcppArmadillo
+RoxygenNote: 6.0.1
