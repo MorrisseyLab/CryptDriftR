@@ -87,7 +87,7 @@ simulateBiasedDriftData = function(lambda, Ns, tau, Pr, time_points, size_measur
 #' WT_params = list(lambda = 0.1, N  = 5, tau = 1)
 #' x = simulateBiasedDriftData(WT_params$lambda, WT_params$N, WT_params$tau, Pr = 0.7, time_points, 8, 300)
 #' 
-#' fit_out = fitBiasedDrift(x, WT_params, time_points)
+#' fit_out = fitBiasedDrift(x, time_points, WT_params)
 #' plotsConvergence_Biased(fit_out)
 #' plotsBiasDrift_Fit(fit_out)
 #'
@@ -129,7 +129,7 @@ plotsConvergence_Biased= function(fit_vals)
 #' WT_params = list(lambda = 0.1, N  = 5, tau = 1)
 #' x = simulateBiasedDriftData(WT_params$lambda, WT_params$N, WT_params$tau, Pr = 0.7, time_points, 8, 300)
 #' 
-#' fit_out = fitBiasedDrift(x, WT_params, time_points)
+#' fit_out = fitBiasedDrift(x, time_points, WT_params)
 #' plotsConvergence_Biased(fit_out)
 #' plotPosterior_Pr(fit_out)
 #'
