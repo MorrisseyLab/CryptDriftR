@@ -1,6 +1,8 @@
-#' @importFrom Rcpp sourceCpp
 #' @useDynLib CryptDriftR
+#' @importFrom Rcpp sourceCpp
+#' @importFrom Rcpp evalCpp
 NULL
+
 
 #' Simulate, analyse and plot crypt clonal data 
 #'
