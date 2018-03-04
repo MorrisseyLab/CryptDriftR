@@ -1,4 +1,29 @@
-fitBiasedDrift = function(x, time.interval, WT_params, max_iter = 80000, n_par_chains = 4, burn_in = 5000, thin = 50)
+#' Fit crypt biased stem cell drift model.
+#'
+#' \code{fitBiasedDrift} will run an mcmc algorithm to infer the parameters from the biased drift model. 
+#' 
+#' @param x Clone size counts. With a column per day and a row per size clone size.  
+#' @param time_interval vector of time point values. Should have same number of elements as columns in x.
+#' @param WT_params List with wild type neutral drift parameters (N, lambda and tau).
+#' @param max_iter number of mcmc iterations to run.
+#' @param n_par_chains number of parallel chains (and cpus used) to run. 
+#' @param burn_in mcmc burn in 
+#' @param thin mcmc thining 
+#' 
+#' @return Will retrun a list that can be used directly with the plotting functions. The list contains an mcmc matrix, the data and time vector used to fit, as well 
+#' as the MAP estimate of the parameters.
+#' 
+#' @examples
+#' time_points = c(4, 7, 10, 14, 21)
+#' WT_params = list(lambda = 0.1, N  = 5, tau = 1)
+#' x = simulateBiasedDriftData(WT_params$lambda, WT_params$N, WT_params$tau, Pr = 0.7, time_points, 8, 300)
+#' 
+#' fit_out = fitBiasedDrift(x, WT_params, time_points)
+#' plotsConvergence_Biased(fit_out)
+#' plotsBiasDrift_Fit(fit_out)
+#'
+#'@export
+fitBiasedDrift = function(x, time_interval, WT_params, max_iter = 80000, n_par_chains = 4, burn_in = 5000, thin = 50)
 {
   Ns.WT     = WT_params$N
   lambda.WT = WT_params$lambda
@@ -6,7 +31,7 @@ fitBiasedDrift = function(x, time.interval, WT_params, max_iter = 80000, n_par_c
   x = as.matrix(x)
   registerDoMC(cores=min(detectCores(), n_par_chains))  
   all_runs = foreach(mcmc.run = 1:n_par_chains, .combine= rbind)%dopar%{
-    mcmc_out = Infer_Biased_mcmc(x, time.interval, max_iter, Ns.WT, lambda.WT, tau.WT)
+    mcmc_out = Infer_Biased_mcmc(x, time_interval, max_iter, Ns.WT, lambda.WT, tau.WT)
     indx_use = seq(from = burn_in, to = nrow(mcmc_out), by = thin)
     mcmc_sub = mcmc_out[indx_use, ]
     return(mcmc_sub)
@@ -15,13 +40,33 @@ fitBiasedDrift = function(x, time.interval, WT_params, max_iter = 80000, n_par_c
   list(mcmc = all_runs, x = x, time_interval = time_interval, WT_params = WT_params, Pr_quant = Pr_quant)
 }
 
-simulateBiasedDriftData = function(lambda, Ns, tau, p, time.samples, size_measure, num.crypts)
+#' Simulate data from biased drift model for testing inference.
+#'
+#' \code{simulateBiasedDriftData} will use the analytical biased stem cell drift model solutions to similate count data. 
+#' 
+#' @param lambda Stem cell replacement rate.
+#' @param Ns Number of functional stem cells per crypt.   
+#' @param tau Time delay until drift starts. 
+#' @param Pr Bias in stem cell replacement Pr = 0.5 is neutral. 
+#' @param time_points vector of time point values.
+#' @param size_measure Fractions in which the crypts are measured in (e.g. 8ths).
+#' @param num_crypts Number of crypts measured per time point.
+#' 
+#' @return Will retrun simulated crypt clone count data.
+#' 
+#' @examples
+#' time_points = c(4, 7, 10, 14, 21)
+#' WT_params = list(lambda = 0.1, N  = 5, tau = 1)
+#' x = simulateBiasedDriftData(WT_params$lambda, WT_params$N, WT_params$tau, Pr = 0.7, time_points, 8, 300)
+#'
+#'@export
+simulateBiasedDriftData = function(lambda, Ns, tau, Pr, time_points, size_measure, num_crypts)
 {
-  Pn    <- th_PulseChase(lambda, Ns, tau, time.samples, persisting = T, Pr = p, splitNum = size_measure)
-  xn    <- matrix(0, size_measure, length(time.samples))
-  for(i in 1:length(time.samples))
+  Pn    <- th_PulseChase(lambda, Ns, tau, time_points, persisting = T, Pr = Pr, splitNum = size_measure)
+  xn    <- matrix(0, size_measure, length(time_points))
+  for(i in 1:length(time_points))
   {
-    x.i          <- sample(1:size_measure, num.crypts, replace = T, prob = Pn[,i])
+    x.i          <- sample(1:size_measure, num_crypts, replace = T, prob = Pn[,i])
     t.i          <- table(x.i)
     indx.i       <- as.numeric(names(t.i))
     xn[indx.i,i] <- t.i    
@@ -29,7 +74,24 @@ simulateBiasedDriftData = function(lambda, Ns, tau, p, time.samples, size_measur
   xn
 }
 
-
+#' MCMC convergence plots
+#'
+#' \code{plotsConvergence_Biased} will plot convergence plots using the MCMC chains. 
+#' 
+#' @param fit_vals list produced by fitBiasedDrift containing amongst other things the MCMC chains.
+#' 
+#' @return Return ggplot object with convergence plots.
+#' 
+#' @examples
+#' time_points = c(4, 7, 10, 14, 21)
+#' WT_params = list(lambda = 0.1, N  = 5, tau = 1)
+#' x = simulateBiasedDriftData(WT_params$lambda, WT_params$N, WT_params$tau, Pr = 0.7, time_points, 8, 300)
+#' 
+#' fit_out = fitBiasedDrift(x, WT_params, time_points)
+#' plotsConvergence_Biased(fit_out)
+#' plotsBiasDrift_Fit(fit_out)
+#'
+#'@export
 plotsConvergence_Biased= function(fit_vals)
 {
   
@@ -54,7 +116,24 @@ plotsConvergence_Biased= function(fit_vals)
 }
 
 
-
+#' MCMC inference plots for biased drift model
+#'
+#' \code{plotPosterior_Pr} will plot posterior plots using the MCMC chains. 
+#' 
+#' @param fit_vals list produced by fitBiasedDrift containing amongst other things the MCMC chains.
+#' 
+#' @return Return ggplot object with posterior plots.
+#' 
+#' @examples
+#' time_points = c(4, 7, 10, 14, 21)
+#' WT_params = list(lambda = 0.1, N  = 5, tau = 1)
+#' x = simulateBiasedDriftData(WT_params$lambda, WT_params$N, WT_params$tau, Pr = 0.7, time_points, 8, 300)
+#' 
+#' fit_out = fitBiasedDrift(x, WT_params, time_points)
+#' plotsConvergence_Biased(fit_out)
+#' plotPosterior_Pr(fit_out)
+#'
+#'@export
 plotPosterior_Pr = function(fit_vals)
 {
   all.runs.subs = data.frame(fit_vals$mcmc)
@@ -69,6 +148,25 @@ plotPosterior_Pr = function(fit_vals)
 }
 
 
+#' Plot data with biased drift model fit
+#'
+#' \code{plotsBiasDrift_Fit} will plot  data and fit of biased drift model. 
+#' 
+#' @param fit_vals list produced by fitBiasedDrift containing amongst other things the MCMC chains.
+#' @param max_x Choose maximum value for the x axis (time)
+
+#' @return Return ggplot object with posterior plots.
+#' 
+#' @examples
+#' time_points = c(4, 7, 10, 14, 21)
+#' WT_params = list(lambda = 0.1, N  = 5, tau = 1)
+#' x = simulateBiasedDriftData(WT_params$lambda, WT_params$N, WT_params$tau, Pr = 0.7, time_points, 8, 300)
+#' 
+#' fit_out = fitBiasedDrift(x, WT_params, time_points)
+#' plotsConvergence_Biased(fit_out)
+#' plotsBiasDrift_Fit(fit_out)
+#'
+#'@export
 plotsBiasDrift_Fit = function(fit_vals, max_x = 100)
 {
   # Transform format for plotting

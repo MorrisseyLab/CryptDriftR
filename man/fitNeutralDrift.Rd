@@ -25,7 +25,7 @@ Will retrun a list that can be used directly with the plotting functions. The li
 as the MAP estimate of the parameters.
 }
 \description{
-\code{fitNeutralDrift}
+\code{fitNeutralDrift} will run an mcmc algorithm to infer the parameters from the neutral drift model.
 }
 \examples{
 time_points = c(4, 7, 10, 14, 21)

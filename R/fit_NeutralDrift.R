@@ -1,6 +1,6 @@
 #' Fit crypt neutral drift model.
 #'
-#' \code{fitNeutralDrift} 
+#' \code{fitNeutralDrift} will run an mcmc algorithm to infer the parameters from the neutral drift model. 
 #' 
 #' @param x Clone size counts. With a column per day and a row per size clone size.  
 #' @param time_interval vector of time point values. Should have same number of elements as columns in x.
