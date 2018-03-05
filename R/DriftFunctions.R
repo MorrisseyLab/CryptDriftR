@@ -139,6 +139,8 @@ th_contLabelling <- function(mu, lambda, Ns, time_points)
 #' @param mu Stem cell replacement rate.
 #' @param lambda Stem cell replacement rate.
 #' @param Ns Number of functional stem cells per crypt.   
+#' @param Pr Bias in stem cell replacement Pr = 0.5 is neutral. 
+#' @param alpha_beta two dim vector giving rate of replacement, alternative to using Pr. The relation is beta   = 2*lambda*Pr, alpha  = 2*lambda*(1-Pr) 
 #' 
 #' @return A list with the slope of the monoclonal accumulation, the intercept of the monoclonal accumulation and the level of the partials.
 #' 
@@ -177,6 +179,7 @@ th_contLabelling_slope_and_partials <- function(mu, lambda, Ns, Pr = 0.5, alpha_
 #' @examples
 #' 
 #' # This is the code used to simulate continous labelling
+#' mu     = 1e-4
 #' lambda = 0.1
 #' N      = 5
 #' Pr     = 0.5
@@ -186,7 +189,7 @@ th_contLabelling_slope_and_partials <- function(mu, lambda, Ns, Pr = 0.5, alpha_
 #' beta  <- 2*lambda*Pr
 #' alpha <- 2*lambda*(1-Pr)
 #' #   Number of chain reactions
-#' M      <- Ns
+#' M      <- N
 #' # Initial state vector
 #' x0             <- c(numSim, rep(0,M)) 
 #' names(x0)      <- paste("x",seq(M+1),sep="") 
@@ -196,7 +199,7 @@ th_contLabelling_slope_and_partials <- function(mu, lambda, Ns, Pr = 0.5, alpha_
 #' nu[M+1,M]      <- +1
 #' nu             <- cbind(nu, -1*nu)
 #' nu             <- nu[,-1*c(ncol(nu))]
-#' a_mat          <- cbind(c(lambda*Ns*mu, rep(beta,M-1), rep(alpha,M-1)), c(seq(M),2:M))
+#' a_mat          <- cbind(c(lambda*N*mu, rep(beta,M-1), rep(alpha,M-1)), c(seq(M),2:M))
 #' sims <- LinearGillespie(numSim=1, nu, a_mat, x0, time_points) 
 #'
 #' @export

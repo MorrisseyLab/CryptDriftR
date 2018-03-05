@@ -14,6 +14,10 @@ th_contLabelling_slope_and_partials(mu, lambda, Ns, Pr = 0.5,
 \item{lambda}{Stem cell replacement rate.}
 
 \item{Ns}{Number of functional stem cells per crypt.}
+
+\item{Pr}{Bias in stem cell replacement Pr = 0.5 is neutral.}
+
+\item{alpha_beta}{two dim vector giving rate of replacement, alternative to using Pr. The relation is beta   = 2*lambda*Pr, alpha  = 2*lambda*(1-Pr)}
 }
 \value{
 A list with the slope of the monoclonal accumulation, the intercept of the monoclonal accumulation and the level of the partials.

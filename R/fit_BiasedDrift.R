@@ -23,7 +23,7 @@
 #' plotsBiasDrift_Fit(fit_out)
 #'
 #'@export
-fitBiasedDrift = function(x, time_interval, WT_params, max_iter = 80000, n_par_chains = 4, burn_in = 5000, thin = 50)
+fitBiasedDrift = function(x, time_interval, WT_params, max_iter = 80000, n_par_chains = 2, burn_in = 5000, thin = 50)
 {
   Ns.WT     = WT_params$N
   lambda.WT = WT_params$lambda

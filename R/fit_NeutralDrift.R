@@ -20,7 +20,7 @@
 #' plotsNeutralDrift_Fit(fit_out)
 #'
 #'@export
-fitNeutralDrift = function(x, time_interval, max_iter = 40000, n_par_chains = 4, burn_in = 5000, thin = 20)
+fitNeutralDrift = function(x, time_interval, max_iter = 40000, n_par_chains = 2, burn_in = 5000, thin = 20)
 {
   x = as.matrix(x)
   registerDoMC(cores=min(detectCores(), n_par_chains))  

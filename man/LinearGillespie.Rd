@@ -29,6 +29,7 @@ Use this function to run gillespie simulations. The function is used internally 
 \examples{
 
 # This is the code used to simulate continous labelling
+mu     = 1e-4
 lambda = 0.1
 N      = 5
 Pr     = 0.5
@@ -38,7 +39,7 @@ numSim = 1e7
 beta  <- 2*lambda*Pr
 alpha <- 2*lambda*(1-Pr)
 #   Number of chain reactions
-M      <- Ns
+M      <- N
 # Initial state vector
 x0             <- c(numSim, rep(0,M)) 
 names(x0)      <- paste("x",seq(M+1),sep="") 
@@ -48,7 +49,7 @@ diag(nu[2:M,]) <- +1
 nu[M+1,M]      <- +1
 nu             <- cbind(nu, -1*nu)
 nu             <- nu[,-1*c(ncol(nu))]
-a_mat          <- cbind(c(lambda*Ns*mu, rep(beta,M-1), rep(alpha,M-1)), c(seq(M),2:M))
+a_mat          <- cbind(c(lambda*N*mu, rep(beta,M-1), rep(alpha,M-1)), c(seq(M),2:M))
 sims <- LinearGillespie(numSim=1, nu, a_mat, x0, time_points) 
 
 }
