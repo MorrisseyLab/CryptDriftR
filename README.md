@@ -9,4 +9,4 @@ library(devtools)
 install_github("MorrisseyLab/CryptDriftR")
 ```
 
-For an fully worked exmaple that replicates the analysis in Vermeulen, Morrissey, et al Science 2013 see the vignette.
+For a fully worked exmaple that replicates the analysis in Vermeulen, Morrissey, et al Science 2013 see the vignette.
