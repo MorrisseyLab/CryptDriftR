@@ -6,7 +6,7 @@ To install use:
 
 ``` R
 library(devtools)
-install_github("MorrisseyLab/CryptDriftR")
+install_github("MorrisseyLab/CryptDriftR", build_vignettes = TRUE, force = TRUE)
 ```
 
 For a fully worked exmaple that replicates the analysis in Vermeulen, Morrissey, et al Science 2013 see the vignette.
