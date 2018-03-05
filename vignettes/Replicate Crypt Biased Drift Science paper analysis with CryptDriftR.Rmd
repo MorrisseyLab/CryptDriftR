@@ -1,0 +1,151 @@
+---
+title: "Use CryptDiftR to replicate Biased drift paper"
+author: "Ed Morrissey"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+First load CryptDriftR.
+
+```{r, echo=TRUE, message=FALSE}
+library(CryptDriftR)
+```
+
+
+Next we load the data from Vermeulen, Morrissey et al Science 2013.
+
+```{r}
+data(PulseChaseData)
+ls()
+```
+This data set comprises all 8 pulse chase data sets used in the paper. 
+
+# Small intestine data analysis
+
+## Wild type data
+Fit the data with the neutral drift model.
+```{r}
+# Get time points from colnames
+time_interval = data_SI_ahCreER_WT %>% colnames() %>% as.numeric()
+# Fit model
+fit_out_WT   = fitNeutralDrift(data_SI_ahCreER_WT, time_interval)
+```
+The model is fit using MCMC, so it's a good idea to check everything has gone well. This tends to not be a problem for this code, but worth checking.
+```{r, fig.width = 7}
+pp_convergence = plotsConvergence_Neutral(fit_out_WT)
+plot(pp_convergence)
+```
+
+We can look at the parametres that were inferred.
+```{r, fig.width = 8.5, fig.height= 7}
+pp_posterior = plotPosterior_Neutral(fit_out_WT) 
+plot(pp_posterior)
+```
+
+We can also access the optimal fit (MAP estimate is used for this).
+```{r}
+print(fit_out_WT$MAP_est)
+```
+
+It's also possible to plot the data with the optimal fit overlaid.
+
+```{r, fig.width = 10, fig.height= 4}
+plotsNeutralDrift_Fit(fit_out_WT)
+```
+
+
+## Mutant pulse chase data
+Next we fit the biased drift model to the KRAS data.
+```{r}
+time_interval = data_SI_ahCreER_KRAS %>% colnames() %>% as.numeric()
+# We use the WT parameters inferred from the WT data
+fit_out_mut   = fitBiasedDrift(data_SI_ahCreER_KRAS, time_interval, WT_params = fit_out_WT$MAP_est)
+```
+
+Again we can check the convergence.
+```{r, fig.width = 7}
+pp_convergence =  plotsConvergence_Biased(fit_out_mut)
+plot(pp_convergence)
+```
+
+We can plot the inferred parameter.
+
+```{r, fig.width = 6}
+pp_posterior = plotPosterior_Pr(fit_out_mut) 
+plot(pp_posterior)
+```
+
+And calculate the estimate of the paramater
+
+```{r}
+print(fit_out_mut$Pr_quant)
+```
+
+We can also plot the fit
+
+```{r , fig.width = 10, fig.height= 5}
+pp_KRAS = plotsBiasDrift_Fit(fit_out_mut)
+plot(pp_KRAS)
+```
+
+We can analyse the APC mutant data sets.
+```{r, fig.width = 6, fig.height= 6}
+time_interval = data_SI_ahCreER_APChet %>% colnames() %>% as.numeric()
+fit_out_het   = fitBiasedDrift(data_SI_ahCreER_APChet, time_interval, WT_params = fit_out_WT$MAP_est)
+time_interval = data_SI_ahCreER_APChom %>% colnames() %>% as.numeric()
+fit_out_hom   = fitBiasedDrift(data_SI_ahCreER_APChom, time_interval, WT_params = fit_out_WT$MAP_est)
+pp_het = plotPosterior_Pr(fit_out_het) + ggtitle("Apc-Het")
+pp_hom = plotPosterior_Pr(fit_out_hom) + ggtitle("Apc-Hom")
+grid.arrange(pp_het, pp_hom)
+```
+
+
+# Colon data analysis
+First we get the neutral drift parameters for colon
+```{r}
+time_interval    = data_Colon_LGR5CreER_WT %>% colnames() %>% as.numeric() 
+fit_out_colon_WT = fitNeutralDrift(data_Colon_LGR5CreER_WT, time_interval)
+print(fit_out_colon_WT$MAP_est)
+```
+
+## Effect of p53
+Next we analyse the effect of p53 mutation on colonic stem cells.
+
+```{r, fig.width = 6}
+time_interval   = data_Colon_LGR5CreER_p53 %>% colnames() %>% as.numeric()
+fit_out   = fitBiasedDrift(data_Colon_LGR5CreER_p53, time_interval, WT_params = fit_out_colon_WT$MAP_est) 
+pp_Pr_p53 = plotPosterior_Pr(fit_out) 
+plot(pp_Pr_p53)
+```
+
+
+## Colitis
+We calculate neutral drift parameters on a colitis background.
+```{r, fig.width = 8.5, fig.height= 7}
+time_interval   = data_DSSColon_LGR5CreER_WT %>% colnames() %>% as.numeric()
+fit_out   = fitNeutralDrift(data_DSSColon_LGR5CreER_WT, time_interval) 
+pp_post = plotPosterior_Neutral(fit_out)
+plot(pp_post)
+```
+
+And next we estimate Pr for p53 mutant stem cells with a colitis background.
+
+```{r, fig.width = 6}
+time_interval = data_DSSColon_LGR5CreER_p53 %>% colnames() %>% as.numeric()
+fit_out_mut   = fitBiasedDrift(data_DSSColon_LGR5CreER_p53, time_interval, WT_params = fit_out$MAP_est) 
+pp_Pr_p53     = plotPosterior_Pr(fit_out_mut) 
+plot(pp_Pr_p53)
+```
+
+

@@ -109,7 +109,7 @@ plotsConvergence_Biased= function(fit_vals)
   pp6 = gg_qq(sub.unsc.post)
   
   
-  grid.arrange(pp1, pp2, 
+  arrangeGrob(pp1, pp2, 
                pp3, pp4,
                pp5, pp6, nrow=3)
   
@@ -195,7 +195,8 @@ plotsBiasDrift_Fit = function(fit_vals, max_x = 100)
   cols = c("WT"="orange","Mutant"=col_p, "Dummy = #111111")
   pp <- pp1 + scale_colour_manual(name="Type", values=cols)  +
     geom_line(data = sim_WT, aes(col = "WT"), lty = 2)   +
-    geom_line(data = sim_mut, aes(col = "Mutant"))
+    geom_line(data = sim_mut, aes(col = "Mutant")) + 
+    theme(legend.position="bottom")
   pp  
 }
 

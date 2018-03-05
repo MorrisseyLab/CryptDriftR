@@ -144,7 +144,7 @@ plotsConvergence_Neutral = function(fit_vals)
   pp12 = gg_qq(sub.unsc.post)
   
   
-  grid.arrange(pp1, pp2, pp3, pp4,
+  arrangeGrob(pp1, pp2, pp3, pp4,
                pp5, pp6, pp7, pp8,
                pp9, pp10, pp11, pp12, nrow=3)
   
@@ -190,7 +190,7 @@ plotPosterior_Neutral = function(fit_vals)
     geom_histogram(aes(y=..density..), binwidth=0.0015)+ theme_bw(base_size = 12)
   pp4 = ggplot(all.runs.subs, aes(x = tau)) + 
     geom_histogram(aes(y=..density..), binwidth=0.05)+ theme_bw(base_size = 12)
-  grid.arrange(pp1, pp2, pp3, pp4, nrow=2, top = textGrob("Neutral drift fit parameters", gp=gpar(fontsize=24), just="top"))
+  arrangeGrob(pp1, pp2, pp3, pp4, nrow=2, top = textGrob("Neutral drift fit parameters", gp=gpar(fontsize=24), just="top"))
 }
 
 
