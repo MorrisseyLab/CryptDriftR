@@ -4,8 +4,15 @@
 \alias{simulateBiasedDriftData}
 \title{Simulate data from biased drift model for testing inference.}
 \usage{
-simulateBiasedDriftData(lambda, Ns, tau, Pr, time_points, size_measure,
-  num_crypts)
+simulateBiasedDriftData(
+  lambda,
+  Ns,
+  tau,
+  Pr,
+  time_points,
+  size_measure,
+  num_crypts
+)
 }
 \arguments{
 \item{lambda}{Stem cell replacement rate.}

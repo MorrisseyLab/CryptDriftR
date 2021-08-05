@@ -5,8 +5,13 @@
 \title{Analytical approximation to continuous labelling model, also allows bias. 
 \code{th_contLabelling}}
 \usage{
-th_contLabelling_slope_and_partials(mu, lambda, Ns, Pr = 0.5,
-  alpha_beta = NULL)
+th_contLabelling_slope_and_partials(
+  mu,
+  lambda,
+  Ns,
+  Pr = 0.5,
+  alpha_beta = NULL
+)
 }
 \arguments{
 \item{mu}{Stem cell replacement rate.}

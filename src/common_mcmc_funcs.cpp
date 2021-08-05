@@ -18,7 +18,7 @@ double unscaled_log_posterior_bias(umat x, vec time_intervals, double lambda, in
   double alpha  = 2*lambda*(1-p);
   mat log_all_preds, probs_drift;
   
-  if(lambda<0 | Ns<2 | Ns > N_limit| tau > time_intervals(0)| tau < 0 | p > 1 | p < 0)
+  if(lambda<0 | Ns<2 | Ns > N_limit | tau > time_intervals(0) | tau < 0 | p > 1 | p < 0)
   {
     unsc_log_post = -999999999999;
   }else{

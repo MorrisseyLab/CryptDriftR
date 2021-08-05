@@ -4,8 +4,14 @@
 \alias{fitNeutralDrift}
 \title{Fit crypt neutral drift model.}
 \usage{
-fitNeutralDrift(x, time_interval, max_iter = 40000, n_par_chains = 4,
-  burn_in = 5000, thin = 20)
+fitNeutralDrift(
+  x,
+  time_interval,
+  max_iter = 40000,
+  n_par_chains = 2,
+  burn_in = 5000,
+  thin = 20
+)
 }
 \arguments{
 \item{x}{Clone size counts. With a column per day and a row per size clone size.}

@@ -5,8 +5,7 @@
 \title{Simulate the continuous labelling model using the gillespie algorithm. 
 \code{sim_contLabelling}}
 \usage{
-sim_contLabelling(mu, lambda, Ns, time_points, numSim, Pr = 0.5,
-  raw_sims = F)
+sim_contLabelling(mu, lambda, Ns, time_points, numSim, Pr = 0.5, raw_sims = F)
 }
 \arguments{
 \item{mu}{Stem cell mutation probability.}

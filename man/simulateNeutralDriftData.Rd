@@ -4,7 +4,14 @@
 \alias{simulateNeutralDriftData}
 \title{Simulate data from neutral drift model for testing inference.}
 \usage{
-simulateNeutralDriftData(lambda, Ns, tau, time_points, size_measure, num_crypts)
+simulateNeutralDriftData(
+  lambda,
+  Ns,
+  tau,
+  time_points,
+  size_measure,
+  num_crypts
+)
 }
 \arguments{
 \item{lambda}{Stem cell replacement rate.}

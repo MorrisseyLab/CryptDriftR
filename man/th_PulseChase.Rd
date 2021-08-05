@@ -6,8 +6,16 @@
 \code{th_PulseChase}  Stochastic model used in "Defining stem cell dynamics in models of intestinal tumor initiation." 
 Vermeulen, Morrissey, et. al. Science 2013. The model is a stochastic birth death model with absorbing boundaries at 0 and N.}
 \usage{
-th_PulseChase(lambda, Ns, tau, time_points, persisting = T, Pr = 0.5,
-  splitNum = 0, alpha_beta = NULL)
+th_PulseChase(
+  lambda,
+  Ns,
+  tau,
+  time_points,
+  persisting = T,
+  Pr = 0.5,
+  splitNum = 0,
+  alpha_beta = NULL
+)
 }
 \arguments{
 \item{lambda}{Stem cell replacement rate.}

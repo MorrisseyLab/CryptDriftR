@@ -11,7 +11,7 @@ License: MIT
 Imports: Rcpp (>= 0.12.11),
     dplyr
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.0
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr

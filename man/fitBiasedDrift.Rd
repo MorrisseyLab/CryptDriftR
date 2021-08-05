@@ -4,8 +4,15 @@
 \alias{fitBiasedDrift}
 \title{Fit crypt biased stem cell drift model.}
 \usage{
-fitBiasedDrift(x, time_interval, WT_params, max_iter = 80000,
-  n_par_chains = 4, burn_in = 5000, thin = 50)
+fitBiasedDrift(
+  x,
+  time_interval,
+  WT_params,
+  max_iter = 80000,
+  n_par_chains = 2,
+  burn_in = 5000,
+  thin = 50
+)
 }
 \arguments{
 \item{x}{Clone size counts. With a column per day and a row per size clone size.}
