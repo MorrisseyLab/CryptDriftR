@@ -192,7 +192,7 @@ plotsBiasDrift_Fit = function(fit_vals, max_x = 100)
                           Pr = fit_vals$Pr_quant[2],  time_points = time_sim, splitNum = nrow(fit_vals$x))
   sim_mut = format_th_data(th_x = sim_mut, time_points = time_sim)
   
-  cols = c("WT"="orange","Mutant"=col_p, "Dummy = #111111")
+  cols = c("WT"="orange","Mutant"=col_p) # , "Dummy = #111111")
   pp <- pp1 + scale_colour_manual(name="Type", values=cols)  +
     geom_line(data = sim_WT, aes(col = "WT"), lty = 2)   +
     geom_line(data = sim_mut, aes(col = "Mutant")) + 
